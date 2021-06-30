@@ -10,7 +10,7 @@ Inside each section, there are different key-value pairs, being the _extensions_
 
 Here is an example theme file:
 
-```toml
+```
 --- JS (mjs for modules with node). TODO Add more
 extensions=js,mjs
 color=255,220,0
