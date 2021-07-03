@@ -2,6 +2,7 @@
    icon    = f069   
 color=6,7,8
 e=js,mjs
+# This is a sample comment
 
 - ---- tS 
 icon=e752

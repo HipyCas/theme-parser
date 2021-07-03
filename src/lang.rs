@@ -125,6 +125,7 @@ impl<'a> Language<'a> {
 
   pub fn as_style(&'a mut self) -> FileStyle {
     self.extensions_str = self.extensions.iter().map(String::as_str).collect();
+    // self.extensions_str = self.extensions.as_slice();
     (&self.extensions_str[..], self.color, &self.icon)
   }
 }

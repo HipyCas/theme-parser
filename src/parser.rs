@@ -48,7 +48,7 @@ impl<'a> Parser {
   */
 
   pub fn parse(self) -> Result<Vec<Language<'a>>, String> {
-    let mut split = self.text.as_str().lines().peekable();
+    let mut split = self.text.as_str().lines();
 
     // let mut reading_lang = false;
     let mut langs = Vec::<Language>::new();
@@ -69,8 +69,8 @@ impl<'a> Parser {
           continue;
         }
       }
-      let line = line.unwrap();
-      if !line.is_empty() {
+      let line = line.unwrap().trim();
+      if !line.is_empty() && !line.starts_with('#') {
         lang.push(line)
       }
     }
