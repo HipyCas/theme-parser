@@ -1,7 +1,7 @@
 use crate::types::FileStyle;
 use crate::{Color, VecConvert};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Language<'a> {
   extensions: Vec<String>,
   extensions_str: Vec<&'a str>,
@@ -50,7 +50,7 @@ impl<'a> Language<'a> {
     {
       if key.is_empty() && value.is_empty() {
         return Err(
-          format!("Line must include a pair of key and value separated by a equal (=) in text line \"{}={}\"", key, value),
+          format!("Line must include a pair of key and value separated by a equal (=) in text line \"{key}={value}\" ({key}={value})", key=key, value=value),
         );
       } else if key.is_empty() {
         return Err(format!("Missing key in text line \"{}={}\"", key, value));
@@ -60,7 +60,10 @@ impl<'a> Language<'a> {
         let mut ext = String::new();
         for (i, mut ch) in value.char_indices() {
           println!(">>>>> Parsing character {}", ch);
-          if i == value.len() - 1 {
+          if ch == ',' && i == 0 {
+            continue;
+          }
+          if i == value.len() - 1 && ch != ',' {
             ext.push(ch);
             ch = ',';
           }
@@ -83,10 +86,13 @@ impl<'a> Language<'a> {
                 "Only 3 numbers (red, green, blue) should be provided for color".to_owned(),
               );
             }
-            if num.len() >= 3 {
-              return Err("Color must range from 0 to 255".to_owned());
+            if num.len() > 3 {
+              return Err(format!("Color must range from 0 to 255, received {}", num));
             }
-            if i == value.len() - 1 {
+            if ch == ',' && i == 0 {
+              continue;
+            }
+            if i == value.len() - 1 && ch != ',' {
               num.push(ch);
               ch = ',';
             }
@@ -127,5 +133,81 @@ impl<'a> Language<'a> {
     self.extensions_str = self.extensions.iter().map(String::as_str).collect();
     // self.extensions_str = self.extensions.as_slice();
     (&self.extensions_str[..], self.color, &self.icon)
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  fn as_vec(text: &str) -> Vec<&str> {
+    text.lines().collect()
+  }
+
+  mod languages {
+    use super::*;
+
+    #[test]
+    fn js() {
+      assert_eq!(
+        Language::new(
+          vec!["js".to_owned(), "mjs".to_owned()],
+          (255, 220, 0),
+          "f898".to_owned()
+        ),
+        Language::parse(&as_vec("extensions=js,mjs\ncolor=255,220,0\nicon=f898")).unwrap()
+      )
+    }
+
+    #[test]
+    fn ts() {
+      assert_eq!(
+        Language::new(vec!["ts".to_owned()], (0, 31, 63), "e628".to_owned()),
+        Language::parse(&as_vec("extensions=ts,\ncolor=0,31,63\nicon=e628")).unwrap()
+      )
+    }
+
+    #[test]
+    fn rs() {
+      assert_eq!(
+        Language::new(vec!["rs".to_owned()], (255, 65, 54), "e7A8".to_owned()),
+        Language::parse(&as_vec("extensions=,rs,\ncolor=255,65,54,\nicon=e7A8")).unwrap()
+      )
+    }
+  }
+
+  mod panic {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn invalid_line() {
+      Language::parse(&as_vec("-lang\nwrong line with no equal at all")).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn too_long_number() {
+      Language::parse(&as_vec("extensions=,rs,\ncolor=2555,65,54,\nicon=e7A8")).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn too_big_number() {
+      Language::parse(&as_vec("extensions=,rs,\ncolor=458,0,54,\nicon=e7A8")).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn too_many_number() {
+      Language::parse(&as_vec("extensions=,rs,\ncolor=-58,0,54,234,\nicon=e7A8")).unwrap();
+      // TODO Improve error message ("invalid digit found in string")
+    }
+
+    #[test]
+    #[should_panic]
+    fn negative_numbers() {
+      Language::parse(&as_vec("extensions=,rs,\ncolor=458,0,54,\nicon=e7A8")).unwrap();
+    }
   }
 }
