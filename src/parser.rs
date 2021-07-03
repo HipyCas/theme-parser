@@ -59,7 +59,7 @@ impl<'a> Parser {
       println!("line: {:?}; lang: {:?}", line, lang);
       if line.is_none() || line.unwrap_or_default().starts_with('-') {
         if !lang.is_empty() {
-          langs.push(Language::parse(&lang)?);
+          langs.push(Language::parse(&lang.as_slice())?);
         }
         lang = Vec::new();
         // reading_lang = false;

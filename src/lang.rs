@@ -19,14 +19,15 @@ impl<'a> Language<'a> {
     }
   }
 
-  pub fn empty() -> Self {
-    Self {
-      extensions: Vec::new(),
-      extensions_str: Vec::new(),
-      color: (0, 0, 0),
-      icon: "".to_owned(),
-    }
-  }
+  //* This method is not used as of now
+  // pub fn empty() -> Self {
+  //   Self {
+  //     extensions: Vec::new(),
+  //     extensions_str: Vec::new(),
+  //     color: (0, 0, 0),
+  //     icon: "".to_owned(),
+  //   }
+  // }
 
   // pub fn parse<P>(text: std::iter::TakeWhile<String, P>) -> Language
   // where
@@ -36,7 +37,7 @@ impl<'a> Language<'a> {
   //   Language::empty()
   // }
 
-  pub fn parse(text: &Vec<&str>) -> Result<Language<'a>, String> {
+  pub fn parse(text: &[&str]) -> Result<Language<'a>, String> {
     println!("{:?}", text);
 
     let mut extensions = Vec::new();
@@ -44,7 +45,7 @@ impl<'a> Language<'a> {
     let mut icon: String = String::new();
 
     for (key, value) in text
-      .into_iter()
+      .iter()
       .map(|pair| pair.split_once('=').unwrap_or(("", "")))
       .map(|(key, value)| (key.trim(), value.trim()))
     {
