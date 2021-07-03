@@ -56,7 +56,6 @@ impl<'a> Parser {
 
     loop {
       let line = split.next();
-      println!("line: {:?}; lang: {:?}", line, lang);
       if line.is_none() || line.unwrap_or_default().starts_with('-') {
         if !lang.is_empty() {
           langs.push(Language::parse(&lang.as_slice())?);

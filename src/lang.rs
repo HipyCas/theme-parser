@@ -38,8 +38,6 @@ impl<'a> Language<'a> {
   // }
 
   pub fn parse(text: &[&str]) -> Result<Language<'a>, String> {
-    println!("{:?}", text);
-
     let mut extensions = Vec::new();
     let mut color: Vec<u8> = Vec::new();
     let mut icon: String = String::new();
@@ -60,7 +58,6 @@ impl<'a> Language<'a> {
       } else if key == "e" || key == "extensions" {
         let mut ext = String::new();
         for (i, mut ch) in value.char_indices() {
-          println!(">>>>> Parsing character {}", ch);
           if ch == ',' && i == 0 {
             continue;
           }
@@ -76,12 +73,10 @@ impl<'a> Language<'a> {
           }
         }
       } else if key == "c" || key == "color" {
-        println!("Key color");
         #[cfg(feature = "color")]
         {
           let mut num = String::new();
           for (i, mut ch) in value.char_indices() {
-            println!(">>>>> Parsing character from {}", ch);
             if color.len() >= 3 {
               return Err(
                 "Only 3 numbers (red, green, blue) should be provided for color".to_owned(),
@@ -109,10 +104,8 @@ impl<'a> Language<'a> {
           }
         }
       } else if key == "i" || key == "icon" {
-        println!("> Parsing icon ({}={})", key, value);
         #[cfg(feature = "icons")]
         {
-          println!(">> Got into config");
           if value.len() > 4 {
             return Err(format!("Icon must be 4 characters, 2 hexadecimal values, but found \"{}\", which is {} characters long", value, value.len()));
           }
