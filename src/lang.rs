@@ -232,7 +232,6 @@ mod tests {
     #[should_panic]
     fn too_many_number() {
       Language::parse(&as_vec("extensions=,rs,\ncolor=-58,0,54,234,\nicon=e7A8")).unwrap();
-      // TODO Improve error message ("invalid digit found in string")
     }
 
     #[test]

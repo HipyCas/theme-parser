@@ -7,7 +7,7 @@ pub type FileStyle<'a> = (&'a [&'a str], Color, &'a str);
 pub type Theme<'a> = &'a [FileStyle<'a>];
 
 pub trait VecConvert {
-  fn as_color(&self) -> Color; // TODO Return results
+  fn as_color(&self) -> Color;
 }
 
 impl VecConvert for Vec<u8> {
@@ -24,7 +24,7 @@ pub type Line<'a> = (usize, &'a str);
 
 #[derive(Debug)]
 pub struct ParserError {
-  line: usize, // TODO Make this Line type and drop text attribute
+  line: usize,
   text: String,
   msg: String,
 }

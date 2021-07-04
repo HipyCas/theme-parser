@@ -50,8 +50,18 @@ Both the code of the theme parser and the specification are distributed under th
 
 - Make `extensions` key required
 
-- Get a better heading than _Pairs_ for SPEC.md
+- Get a better heading than _Pairs_ for SPEC.md <- starting to like _Pairs_
 
-- Better error messages, maybe by indicating the line of the error (look at https://llogiq.github.io/2017/06/01/perf-pitfalls.html), use `for (i, line) in text.lines().enumerate() { /* ... */ }`
+- ~~Better error messages, maybe by indicating the line of the error (look at https://llogiq.github.io/2017/06/01/perf-pitfalls.html), use `for (i, line) in text.lines().enumerate() { /* ... */ }`~~
 
-- Return `struct ParseError { line: usize, text: String, error_msg: String }` for Result.Err
+- ~~Return `struct ParseError { line: usize, text: String, error_msg: String }` for Result.Err~~
+
+- Use `;` to separate lines instead of line break
+
+- Make `ParserError.line` of `Line` type and drop `ParserError.text` attribute
+
+- Make `Line` accept `AsRef<str>` instead of directly `&str` so you can use `String` in `ParserError`
+
+- Return result in `Vec<u8>.as_color()` instead of `(0,0,0)`
+
+- Improve error message ("invalid digit found in string") in lang parser
