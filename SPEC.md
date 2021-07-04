@@ -27,6 +27,8 @@ The theme styles are indicated in form of `key=value` pairs inside each section,
 
 - `icon`: A four hexadecimal character string representing the icon Unicode code. Icons are supposed to be used with NerdFonts (icons used by default in `lsfp` depend on this font), and you can find a full list of icons and their hexadecimal string on the [NerdFont cheat-sheet](https://www.nerdfonts.com/cheat-sheet); but you may use any form of icon support if it is based in 4 character hexadecimal Unicode value. This configuration is only available if `lsfp` is compiled with the _icons_ feature (see [Features](#Features) for more about features). The syntax for this key is as follows: `icon={4 chars}`, as an example `icon=f898`.
 
+Short versions of all keys are also available, which are the first letter of the key. That way, `icon=f898` is the same as `i=f898` and `extensions=js,mjs` is the same as `e=js,mjs`.
+
 ## Comments
 
 You can write comments by using a hashtag (`#`), wither at the beginning of a line or at the end of a pair. Any text in the comment is completely ignored by the parser. For example, the following are both valid comments:
@@ -75,6 +77,12 @@ color=255,65,54
 extensions=rs
 icon=e7a8
 ```
+
+## Named themes
+
+When `lsfp` receives a value for the `--theme` flag that is not a path, it will try to load a _named theme_. A _named theme_ is simply a theme file located under `~/.lsfp-themes`, whose name is equivalent to the file name. That way, if you run `lsfp --theme noir` the theme file `~/.lsfp-themes/noir` will be loaded, and if you run `lsfp --theme solarized.dark` the theme file `~/.lsfp-themes/solarized.dark` will be loaded.
+
+File themes do not have an specific extensions neither syntax support in any IDE. That is one of the reasons why `lsfp` loads named themes just by their whole file name, as extension is not important, the whole file name is used.
 
 ## Distribution
 
