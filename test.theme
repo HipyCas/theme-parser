@@ -7,4 +7,4 @@ e=js,mjs
 - ---- tS 
 icon=e752
 color=6,7,255
-extensions=ts
+extensions=ts # Inline comments hurray!
