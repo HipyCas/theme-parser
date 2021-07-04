@@ -1,4 +1,5 @@
 use crate::lang::Language;
+use crate::{Line, ParserError};
 
 #[derive(Debug)]
 pub struct Parser {
@@ -47,17 +48,21 @@ impl<'a> Parser {
   }
   */
 
-  pub fn parse(self) -> Result<Vec<Language<'a>>, String> {
-    let mut split = self.text.as_str().lines();
+  pub fn parse(self) -> Result<Vec<Language<'a>>, ParserError> {
+    let mut split = self.text.as_str().lines().enumerate();
 
     let mut section_started = false;
 
     // let mut reading_lang = false;
     let mut langs = Vec::<Language>::new();
-    let mut lang = Vec::<&str>::new();
+    let mut lang = Vec::<Line<'a>>::new();
 
     loop {
-      let line = split.next();
+      let option = split.next();
+      let (index, line) = match option {
+        Some(opt) => (opt.0 + 1, Some(opt.1)),
+        None => (0, None),
+      };
       if line.is_none() || line.unwrap_or_default().trim_start().starts_with('-') {
         section_started = true;
         if !lang.is_empty() {
@@ -74,11 +79,13 @@ impl<'a> Parser {
       let line = line.unwrap().trim();
       if !line.is_empty() && !line.starts_with('#') {
         if !section_started {
-          return Err(
+          return Err(ParserError::new(
+            index,
+            line.to_owned(),
             "Expected file to start with section or comment, instead pair was found".to_owned(),
-          );
+          ));
         }
-        lang.push(line)
+        lang.push((index, line))
       }
     }
 

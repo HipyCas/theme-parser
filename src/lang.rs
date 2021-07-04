@@ -1,5 +1,5 @@
 use crate::types::FileStyle;
-use crate::{Color, VecConvert};
+use crate::{Color, Line, ParserError, VecConvert};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct Language<'a> {
@@ -37,25 +37,35 @@ impl<'a> Language<'a> {
   //   Language::empty()
   // }
 
-  pub fn parse(text: &[&str]) -> Result<Language<'a>, String> {
+  pub fn parse(text: &[Line]) -> Result<Language<'a>, ParserError> {
     let mut extensions = Vec::new();
     let mut color: Vec<u8> = Vec::new();
     let mut icon: String = String::new();
 
-    for (key, value) in text
+    for (index, original, (key, value)) in text
       .iter()
-      .map(|line| line.split_once('#').unwrap_or((line, "")).0) // Remove inline comments
-      .map(|pair| pair.split_once('=').unwrap_or(("", "")))
-      .map(|(key, value)| (key.trim(), value.trim()))
+      .map(|(i, line)| (i, line, line.split_once('#').unwrap_or((line, "")).0)) // Remove inline comments
+      .map(|(i, original, pair)| (i, original, pair.split_once('=').unwrap_or(("", ""))))
+      .map(|(i, original, (key, value))| (*i, *original, (key.trim(), value.trim())))
     {
       if key.is_empty() && value.is_empty() {
-        return Err(
-          format!("Line must include a pair of key and value separated by a equal (=) in text line \"{key}={value}\" ({key}={value})", key=key, value=value),
+        return Err(ParserError::new(
+          index,
+          original.to_owned(),
+          format!("Line must include a pair of key and value separated by a equal (=) in text line \"{key}={value}\" ({key}={value})", key=key, value=value)),
         );
       } else if key.is_empty() {
-        return Err(format!("Missing key in text line \"{}={}\"", key, value));
+        return Err(ParserError::new(
+          index,
+          original.to_owned(),
+          format!("Missing key in text line \"{}={}\"", key, value),
+        ));
       } else if value.is_empty() {
-        return Err(format!("Missing value in text line \"{}={}\"", key, value));
+        return Err(ParserError::new(
+          index,
+          original.to_owned(),
+          format!("Missing value in text line \"{}={}\"", key, value),
+        ));
       } else if key == "e" || key == "extensions" {
         let mut ext = String::new();
         for (i, mut ch) in value.char_indices() {
@@ -79,12 +89,18 @@ impl<'a> Language<'a> {
           let mut num = String::new();
           for (i, mut ch) in value.char_indices() {
             if color.len() >= 3 {
-              return Err(
+              return Err(ParserError::new(
+                index,
+                original.to_owned(),
                 "Only 3 numbers (red, green, blue) should be provided for color".to_owned(),
-              );
+              ));
             }
             if num.len() > 3 {
-              return Err(format!("Color must range from 0 to 255, received {}", num));
+              return Err(ParserError::new(
+                index,
+                original.to_owned(),
+                format!("Color must range from 0 to 255, received {}", num),
+              ));
             }
             if ch == ',' && i == 0 {
               continue;
@@ -98,7 +114,13 @@ impl<'a> Language<'a> {
             } else {
               color.push(match num.parse() {
                 Ok(num) => num,
-                Err(err) => return Err(err.to_string()),
+                Err(err) => {
+                  return Err(ParserError::new(
+                    index,
+                    original.to_owned(),
+                    err.to_string(),
+                  ))
+                }
               });
               num = String::new();
             }
@@ -108,12 +130,18 @@ impl<'a> Language<'a> {
         #[cfg(feature = "icons")]
         {
           if value.len() > 4 {
-            return Err(format!("Icon must be 4 characters, 2 hexadecimal values, but found \"{}\", which is {} characters long", value, value.len()));
+            return Err(ParserError::new(
+              index,
+              original.to_owned(),format!("Icon must be 4 characters, 2 hexadecimal values, but found \"{}\", which is {} characters long", value, value.len())));
           }
           if !value.chars().all(|c| c.is_digit(16)) {
-            return Err(format!(
-              "One or more characters in \"{}\" icon are not valid hexadecimal characters",
-              value
+            return Err(ParserError::new(
+              index,
+              original.to_owned(),
+              format!(
+                "One or more characters in \"{}\" icon are not valid hexadecimal characters",
+                value
+              ),
             ));
           }
           icon = value.to_owned()
@@ -135,8 +163,8 @@ impl<'a> Language<'a> {
 mod tests {
   use super::*;
 
-  fn as_vec(text: &str) -> Vec<&str> {
-    text.lines().collect()
+  fn as_vec(text: &str) -> Vec<(usize, &str)> {
+    text.lines().enumerate().collect()
   }
 
   mod languages {

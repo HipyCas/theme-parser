@@ -3,7 +3,7 @@ mod lang;
 mod parser;
 mod types;
 
-pub use types::{Color, VecConvert};
+pub use types::{Color, Line, ParserError, VecConvert};
 
 fn main() {
     println!(
