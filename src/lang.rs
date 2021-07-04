@@ -149,7 +149,15 @@ impl<'a> Language<'a> {
       }
     }
 
-    Ok(Language::new(extensions, color.as_color(), icon))
+    if extensions.is_empty() {
+      Err(ParserError::new(
+        text[text.len() - 1].0,
+        text[text.len() - 1].1.to_owned(),
+        "extensions key must be present".to_owned(),
+      ))
+    } else {
+      Ok(Language::new(extensions, color.as_color(), icon))
+    }
   }
 
   pub fn as_style(&'a mut self) -> FileStyle {
