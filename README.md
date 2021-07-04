@@ -34,10 +34,16 @@ You can also find a test theme file in the root of the repository, called [test.
 
 ## TODO
 
-- Allow extra non empty lines as comments, maybe make them start with a `#` or similar
+- ~~Allow extra non empty lines as comments, maybe make them start with a `#` or similar~~
 
 - Allow to set default icon and colors, same as for directories (collapsed and expanded)
 
 - Allow for `:` instead of `=` separator
 
-- **IMPORTANT** Formal specification file
+- ~~**IMPORTANT** Formal specification file~~
+
+- Make `extensions` key required
+
+- Get a better heading than _Pairs_ for SPEC.md
+
+- Better error messages, maybe by indicating the line of the error (look at https://llogiq.github.io/2017/06/01/perf-pitfalls.html), use `for (i, line) in text.lines().enumerate() { /* ... */ }`
