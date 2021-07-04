@@ -1,12 +1,12 @@
 # icon = f069
 
 - 
-   icon    = f069   
+   icon    : f069   
 color=6,7,8
 e=js,mjs
 # This is a sample comment
 
 - ---- tS 
 icon=e752
-color=6,7,255
+color:6,7,255
 extensions=ts # Inline comments hurray!

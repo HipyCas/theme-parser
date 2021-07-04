@@ -45,7 +45,15 @@ impl<'a> Language<'a> {
     for (index, original, (key, value)) in text
       .iter()
       .map(|(i, line)| (i, line, line.split_once('#').unwrap_or((line, "")).0)) // Remove inline comments
-      .map(|(i, original, pair)| (i, original, pair.split_once('=').unwrap_or(("", ""))))
+      .map(|(i, original, pair)| {
+        (
+          i,
+          original,
+          pair
+            .split_once('=')
+            .unwrap_or(pair.split_once(':').unwrap_or(("", ""))),
+        )
+      })
       .map(|(i, original, (key, value))| (*i, *original, (key.trim(), value.trim())))
     {
       if key.is_empty() && value.is_empty() {

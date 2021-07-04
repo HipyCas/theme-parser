@@ -19,7 +19,7 @@ All pairs **MUST** be inside a section, meaning that no pair can go at the begin
 
 ## Pairs
 
-The theme styles are indicated in form of `key=value` pairs inside each section, being `extensions` the primary key (the one that is used for identification by `lsfp`), and the other dependant of `lsfp`'s features. There are three available pairs are the following as of now:
+The theme styles are indicated in form of `key=value` or `key:value` (both `=` and `:` have the same meaning, equal is used in this specification) pairs inside each section, being `extensions` the primary key (the one that is used for identification by `lsfp`), and the other dependant of `lsfp`'s features. There are three available pairs are the following as of now:
 
 - `extensions`: An array-like of extensions, which should be styled with the styles specified in the section. If this is not specified, the styles in the section will not be applied to any file. The syntax for this key is as follows: `color={ext1},{ext2},{..exts}`, as an example `extensions=js,mjs`.
 
