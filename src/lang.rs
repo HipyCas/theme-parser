@@ -44,6 +44,7 @@ impl<'a> Language<'a> {
 
     for (key, value) in text
       .iter()
+      .map(|line| line.split_once('#').unwrap_or((line, "")).0) // Remove inline comments
       .map(|pair| pair.split_once('=').unwrap_or(("", "")))
       .map(|(key, value)| (key.trim(), value.trim()))
     {
