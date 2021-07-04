@@ -32,6 +32,10 @@ A more detailed specification is on its way. When done, it will temporally live 
 
 You can also find a test theme file in the root of the repository, called [test.theme](https://github.com/HipyCas/theme-parser/blob/master/test.theme) (extension is only for easy identification). This theme file is read by the main script for testing purposes, and you may want to try modify it and test it.
 
+## License
+
+Both the code of the theme parser and the specification are distributed under the same license as `lsfp`, as it is part of the program. This license is the MIT license, which allows you to modify and use this parser and specification for both personal and commercial projects, either open source or closed source. See the full LICENSE file at [The-Noah/lsfp](https://github.com/The-Noah/lsfp/blob/master/LICENSE)
+
 ## TODO
 
 - ~~Allow extra non empty lines as comments, maybe make them start with a `#` or similar~~
