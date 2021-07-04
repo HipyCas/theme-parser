@@ -15,6 +15,8 @@ Each section contains `key=value` pairs, which are explained in the [Pairs](#Pai
     icon=f898
 ```
 
+All pairs **MUST** be inside a section, meaning that no pair can go at the beginning of the file before the first section, only comments may go before the first section.
+
 ## Pairs
 
 The theme styles are indicated in form of `key=value` pairs inside each section, being `extensions` the primary key (the one that is used for identification by `lsfp`), and the other dependant of `lsfp`'s features. There are three available pairs are the following as of now:
@@ -29,10 +31,12 @@ The theme styles are indicated in form of `key=value` pairs inside each section,
 
 You can write comments by using a hashtag (`#`), wither at the beginning of a line or at the end of a pair. Any text in the comment is completely ignored by the parser. For example, the following are both valid comments:
 
-```txt
+```
 icon=f2a4 # Beautiful solid icon
 # TODO Add color, get some ideas online
 ```
+
+Due to the fact that anything in a section delimiter after the first dash is ignored, any text after that first dash can be considered a de facto comment.
 
 ## Features
 
@@ -48,7 +52,7 @@ The parser presents some flexibilities in how you may write values, which are ou
 
 - Leading and trailing commas are ignored in both `color` and `extensions` settings, meaning that both `color=,9,0,12` and `extensions=c,h,o,` are both valid pairs.
 
-- Spaces at beginning and end of lines, keys and values are removed, therefore both `<tab|spaces># comment` and `<spaces>icon = f56a <spaces>` are valid. **LEADING SPACES ARE NOT ALLOWED IN SECTION BEGINNINGS, DASH MUST ALWAYS BE THE FIRST CHARACTER**
+- Spaces at beginning and end of lines, keys and values are removed, therefore `<tab|spaces># comment`, `<spaces>icon = f56a <spaces>` and `<spaces>- section<spaces>` are all valid.
 
 ## Example
 
