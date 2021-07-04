@@ -40,23 +40,23 @@ Both the code of the theme parser and the specification are distributed under th
 
 ## TODO
 
+### Meaningful (impact user experience)
+
+- Allow to set default icon and colors, same as for directories (collapsed and expanded), use `!default`, `!dir_default`, `!dir_open` and `!dir_collapsed`
+
+- Use `;` to separate lines instead of line break
+
 - ~~Allow extra non empty lines as comments, maybe make them start with a `#` or similar~~
 
-- Allow to set default icon and colors, same as for directories (collapsed and expanded)
+- ~~Allow for `:` instead of `=` separator~~
 
-- Allow for `:` instead of `=` separator
+- ~~Make `extensions` key required~~
 
-- ~~**IMPORTANT** Formal specification file~~
-
-- Make `extensions` key required
-
-- Get a better heading than _Pairs_ for SPEC.md <- starting to like _Pairs_
+### DX
 
 - ~~Better error messages, maybe by indicating the line of the error (look at https://llogiq.github.io/2017/06/01/perf-pitfalls.html), use `for (i, line) in text.lines().enumerate() { /* ... */ }`~~
 
 - ~~Return `struct ParseError { line: usize, text: String, error_msg: String }` for Result.Err~~
-
-- Use `;` to separate lines instead of line break
 
 - Make `ParserError.line` of `Line` type and drop `ParserError.text` attribute
 
@@ -65,3 +65,11 @@ Both the code of the theme parser and the specification are distributed under th
 - Return result in `Vec<u8>.as_color()` instead of `(0,0,0)`
 
 - Improve error message ("invalid digit found in string") in lang parser
+
+### Specification
+
+- ~~**IMPORTANT** Formal specification file~~
+
+- Get a better heading than _Pairs_ for SPEC.md <- starting to like _Pairs_
+
+- Update [README.md](https://github.com/HipyCas/theme-parser/blob/master/README.md) to match the specification
