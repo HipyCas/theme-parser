@@ -1,5 +1,7 @@
 # Theme parser for `lsfp`
 
+**This README file is outdated, take a look at the formal specification in [SPEC.md](https://github.com/HipyCas/theme-parser/blob/master/SPEC.md) instead. I am currently working on updating this README file, but the formal specification will always have precedence over this README.**
+
 This repository contains a simple theme parser for the command line tool [`lsfp`](https://github.com/The-Noah/lsfp). This code is located in this repository for testing and easier development, but after it is successfully tested, the code will be moved into the main repository.
 
 ## The theme file syntax
@@ -51,3 +53,5 @@ Both the code of the theme parser and the specification are distributed under th
 - Get a better heading than _Pairs_ for SPEC.md
 
 - Better error messages, maybe by indicating the line of the error (look at https://llogiq.github.io/2017/06/01/perf-pitfalls.html), use `for (i, line) in text.lines().enumerate() { /* ... */ }`
+
+- Return `struct ParseError { line: usize, text: String, error_msg: String }` for Result.Err
