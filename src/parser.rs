@@ -50,6 +50,8 @@ impl<'a> Parser {
   pub fn parse(self) -> Result<Vec<Language<'a>>, String> {
     let mut split = self.text.as_str().lines();
 
+    let mut section_started = false;
+
     // let mut reading_lang = false;
     let mut langs = Vec::<Language>::new();
     let mut lang = Vec::<&str>::new();
@@ -57,6 +59,7 @@ impl<'a> Parser {
     loop {
       let line = split.next();
       if line.is_none() || line.unwrap_or_default().starts_with('-') {
+        section_started = true;
         if !lang.is_empty() {
           langs.push(Language::parse(&lang.as_slice())?);
         }
@@ -70,6 +73,11 @@ impl<'a> Parser {
       }
       let line = line.unwrap().trim();
       if !line.is_empty() && !line.starts_with('#') {
+        if !section_started {
+          return Err(
+            "Expected file to start with section or comment, instead pair was found".to_owned(),
+          );
+        }
         lang.push(line)
       }
     }
