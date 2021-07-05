@@ -11,12 +11,13 @@ fn main() {
     let theme = get_theme(std::env::args().nth(1));
     println!(
         "{:?}",
-        &(parser::Parser::new(theme)
+        parser::Parser::new(theme)
             .parse()
             .expect("Error while parsing theme")
             .iter_mut()
             .map(|l| l.as_style())
-            .collect::<Vec<_>>())[..] as types::Theme
+            .collect::<Vec<_>>()
+            .as_slice() as types::Theme
     )
 }
 
